@@ -1,5 +1,5 @@
 name: drive_trust
-description: "A new Flutter project."
+description: "Application mobile pour la gestion de véhicules, chauffeurs et transactions."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -34,18 +34,57 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  firebase_core: ^3.12.1
+  
+  # Firebase
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.7.3
+  cloud_firestore: ^4.8.5
+  
+  # State Management
+  flutter_riverpod: ^2.3.6
+  riverpod_annotation: ^2.3.3
+  
+  # Navigation
+  go_router: ^10.0.0
+  go_router_builder: ^2.4.1
+  
+  # Dependency Injection
+  get_it: ^7.6.0
+  injectable: ^2.3.2
+  
+  # Functional Programming
+  dartz: ^0.10.1
+  
+  # Utilities
+  equatable: ^2.0.5
+  uuid: ^4.2.2
+  intl: ^0.19.0
+  flutter_secure_storage: ^9.0.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  
+  # UI
+  google_fonts: ^5.1.0
+  flutter_svg: ^2.0.9
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
+  
+  # Linting
   flutter_lints: ^5.0.0
+  
+  # Code Generation
+  build_runner: ^2.4.7
+  injectable_generator: ^2.4.1
+  freezed: ^2.4.6
+  json_serializable: ^6.7.1
+  riverpod_generator: ^2.3.9
+  
+  # Testing
+  mockito: ^5.4.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,7 +98,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/images/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
