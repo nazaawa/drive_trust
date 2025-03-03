@@ -1,31 +1,27 @@
 import 'package:dartz/dartz.dart';
 import 'package:drive_trust/core/error/failures.dart';
-import 'package:drive_trust/features/auth/domain/entities/user.dart';
-import 'package:drive_trust/features/auth/domain/repositories/auth_repository.dart';
-import 'package:equatable/equatable.dart';
+import 'package:drive_trust/core/utils/use_cases.dart';
 
-class SignInUseCase {
-  final AuthRepository repository;
+import '../entities/auth_user.dart';
+import '../repositories/auth_repository.dart';
 
-  SignInUseCase(this.repository);
-
-  Future<Either<Failure, User>> call(SignInParams params) async {
-    return await repository.signInWithEmailAndPassword(
-      params.email,
-      params.password,
-    );
-  }
-}
-
-class SignInParams extends Equatable {
+class SignInParams {
   final String email;
   final String password;
 
-  const SignInParams({
-    required this.email,
-    required this.password,
-  });
+  SignInParams({required this.email, required this.password});
+}
+
+class SignInUseCase implements UseCase<AuthUser, SignInParams> {
+  final IAuthRepository repository;
+
+  SignInUseCase(this.repository);
 
   @override
-  List<Object> get props => [email, password];
+  Future<Either<Failure, AuthUser>> call(SignInParams params) {
+    return repository.signInWithEmailAndPassword(
+      email: params.email,
+      password: params.password,
+    );
+  }
 }
