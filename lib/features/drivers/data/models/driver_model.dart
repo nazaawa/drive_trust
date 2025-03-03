@@ -2,18 +2,12 @@ import 'package:drive_trust/features/drivers/domain/entities/driver.dart';
 
 class DriverModel extends Driver {
   const DriverModel({
-    required String id,
-    required String name,
-    required String email,
-    String? vehicleId,
-    ContractStatus contractStatus = ContractStatus.inactive,
-  }) : super(
-          id: id,
-          name: name,
-          email: email,
-          vehicleId: vehicleId,
-          contractStatus: contractStatus,
-        );
+    required super.id,
+    required super.name,
+    required super.email,
+    super.vehicleId,
+    super.contractStatus,
+  });
 
   factory DriverModel.fromJson(Map<String, dynamic> json) {
     return DriverModel(

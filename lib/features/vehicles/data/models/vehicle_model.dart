@@ -2,18 +2,12 @@ import 'package:drive_trust/features/vehicles/domain/entities/vehicle.dart';
 
 class VehicleModel extends Vehicle {
   const VehicleModel({
-    required String id,
-    required String ownerId,
-    required String plateNumber,
-    required String brand,
-    required String model,
-  }) : super(
-          id: id,
-          ownerId: ownerId,
-          plateNumber: plateNumber,
-          brand: brand,
-          model: model,
-        );
+    required super.id,
+    required super.ownerId,
+    required super.plateNumber,
+    required super.brand,
+    required super.model,
+  });
 
   factory VehicleModel.fromJson(Map<String, dynamic> json) {
     return VehicleModel(

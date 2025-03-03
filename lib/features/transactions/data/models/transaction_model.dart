@@ -2,20 +2,13 @@ import 'package:drive_trust/features/transactions/domain/entities/transaction.da
 
 class TransactionModel extends Transaction {
   const TransactionModel({
-    required String id,
-    required String vehicleId,
-    required double amount,
-    required TransactionCategory category,
-    required String description,
-    required DateTime timestamp,
-  }) : super(
-          id: id,
-          vehicleId: vehicleId,
-          amount: amount,
-          category: category,
-          description: description,
-          timestamp: timestamp,
-        );
+    required super.id,
+    required super.vehicleId,
+    required super.amount,
+    required super.category,
+    required super.description,
+    required super.timestamp,
+  });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
