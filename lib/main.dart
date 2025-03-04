@@ -11,11 +11,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
+
+  // Initialize dependency injection
+
+// ...
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Initialize dependency injection
   await configureDependencies();
 
   runApp(

@@ -1,7 +1,9 @@
+import 'package:drive_trust/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:drive_trust/features/auth/presentation/screens/login_screen.dart';
 import 'package:drive_trust/features/auth/presentation/screens/signup_screen.dart';
 import 'package:drive_trust/features/auth/presentation/screens/splash_screen.dart';
-import 'package:drive_trust/features/home/presentation/screens/home_screen.dart';
+import 'package:drive_trust/features/drivers/presentation/screens/driver_list_screen.dart';
+import 'package:drive_trust/features/home/presentation/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -124,7 +126,7 @@ class ForgotPasswordRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage<void>(
       key: state.pageKey,
-      child: Container(),
+      child: const ForgotPasswordScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
           position: Tween<Offset>(
@@ -140,6 +142,11 @@ class ForgotPasswordRoute extends GoRouteData {
 
 @TypedGoRoute<HomeRoute>(
   path: "/home",
+  routes: [
+    TypedGoRoute<DriverListSRoute>(
+      path: "driver-list",
+    )
+  ],
 )
 class HomeRoute extends GoRouteData {
   const HomeRoute();
@@ -147,7 +154,27 @@ class HomeRoute extends GoRouteData {
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage<void>(
       key: state.pageKey,
-      child: const HomeScreen(),
+      child: const MainScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1, 0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      },
+    );
+  }
+}
+
+class DriverListSRoute extends GoRouteData {
+  const DriverListSRoute();
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: const DriverListScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
           position: Tween<Offset>(
