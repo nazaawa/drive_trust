@@ -1,4 +1,5 @@
 import 'package:drive_trust/features/vehicles/presentation/providers/vehicle_provider.dart';
+import 'package:drive_trust/features/vehicles/presentation/screens/vehicle_detail_screen.dart';
 import 'package:drive_trust/features/vehicles/presentation/widgets/vehicle_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,7 +72,16 @@ class VehicleListScreen extends ConsumerWidget {
             itemCount: vehicles.length,
             itemBuilder: (context, index) {
               final vehicle = vehicles[index];
-              return VehicleCard(vehicle: vehicle);
+              return VehicleCard(
+                vehicle: vehicle,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => VehicleDetailScreen(vehicleId: vehicle.id),
+                    ),
+                  );
+                },
+              );
             },
           );
         },
