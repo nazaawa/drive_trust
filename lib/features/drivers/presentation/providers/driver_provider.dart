@@ -22,7 +22,9 @@ DriverRemoteDataSource driverRemoteDataSource(Ref ref) {
 @Riverpod(keepAlive: true)
 DriverRepositoryImpl driverRepository(Ref ref) {
   return DriverRepositoryImpl(
-      remoteDataSource: ref.watch(driverRemoteDataSourceProvider));
+    remoteDataSource: ref.watch(driverRemoteDataSourceProvider),
+    firebaseAuth: ref.watch(firebaseAuthProvider),
+  );
 }
 
 @Riverpod(keepAlive: true)
