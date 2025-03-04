@@ -11,6 +11,7 @@ abstract class IAuthRepository {
   Future<Either<Failure, AuthUser>> signUpWithEmailAndPassword({
     required String email,
     required String password,
+    String? name,
   });
 
   Future<Either<Failure, void>> signOut();

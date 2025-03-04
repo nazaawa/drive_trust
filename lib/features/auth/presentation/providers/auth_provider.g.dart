@@ -126,7 +126,7 @@ final currentUserNotifierProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef CurrentUserNotifierRef = ProviderRef<Raw<AsyncValueNotifier<User?>>>;
-String _$authNotifierHash() => r'75937bf571a7e331ed8cdb69d6d3b3c4bbc3fbf2';
+String _$authNotifierHash() => r'a6b0899bd2627e5fb617b7e7cd2ee4a627f4f763';
 
 /// See also [AuthNotifier].
 @ProviderFor(AuthNotifier)

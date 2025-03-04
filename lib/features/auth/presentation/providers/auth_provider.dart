@@ -56,11 +56,11 @@ class AuthNotifier extends _$AuthNotifier {
     );
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String email, String password, {String? name}) async {
     state = const AsyncLoading();
 
     final result = await ref.read(signUpUseCaseProvider).call(
-          SignUpParams(email: email, password: password),
+          SignUpParams(email: email, password: password, name: name),
         );
 
     state = result.fold(

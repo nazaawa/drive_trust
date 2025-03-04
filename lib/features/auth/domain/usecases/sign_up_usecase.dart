@@ -8,8 +8,9 @@ import '../repositories/auth_repository.dart';
 class SignUpParams {
   final String email;
   final String password;
+  final String? name;
 
-  SignUpParams({required this.email, required this.password});
+  SignUpParams({required this.email, required this.password, this.name});
 }
 
 class SignUpUseCase implements UseCase<AuthUser, SignUpParams> {
@@ -22,6 +23,7 @@ class SignUpUseCase implements UseCase<AuthUser, SignUpParams> {
     return repository.signUpWithEmailAndPassword(
       email: params.email,
       password: params.password,
+      name: params.name,
     );
   }
 }
