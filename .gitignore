@@ -51,3 +51,7 @@ app.*.map.json
 **/generated/
 lib/features/**/*.g.dart
 lib/features/**/*.freezed.dart
+
+# Fichiers générés Android
+android/app/.cxx/
+android/**/.cxx/
