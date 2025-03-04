@@ -5,11 +5,16 @@ import 'package:drive_trust/features/drivers/data/datasources/driver_remote_data
 import 'package:drive_trust/features/drivers/data/models/driver_model.dart';
 import 'package:drive_trust/features/drivers/domain/entities/driver.dart';
 import 'package:drive_trust/features/drivers/domain/repositories/driver_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DriverRepositoryImpl implements DriverRepository {
   final DriverRemoteDataSource remoteDataSource;
+  final FirebaseAuth firebaseAuth;
 
-  DriverRepositoryImpl({required this.remoteDataSource});
+  DriverRepositoryImpl({
+    required this.remoteDataSource,
+    required this.firebaseAuth,
+  });
 
   @override
   Future<Either<Failure, List<Driver>>> getDriversByOwnerId(
@@ -57,11 +62,13 @@ class DriverRepositoryImpl implements DriverRepository {
     ContractStatus contractStatus,
   ) async {
     try {
-      // We need to get the current user's ID to set as the owner
-      // This would typically come from an auth repository or provider
-      // For now, we'll pass it from the presentation layer
-      final ownerId =
-          "current_user_id"; // This will be replaced with the actual user ID
+      // Get the current user's ID from Firebase Auth
+      final currentUser = firebaseAuth.currentUser;
+      if (currentUser == null) {
+        return Left(ServerFailure("User not authenticated"));
+      }
+
+      final ownerId = currentUser.uid;
 
       final driver = await remoteDataSource.addDriver(
         ownerId,
