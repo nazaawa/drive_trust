@@ -8,16 +8,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:drive_trust/features/vehicles/data/datasources/vehicle_remote_datasource.dart';
 import 'package:drive_trust/features/vehicles/data/repositories/vehicle_repository_impl.dart';
 
-final vehicleProvider = StateNotifierProvider<VehicleNotifier, AsyncValue<List<Vehicle>>>((ref) {
+final vehicleProvider =
+    StateNotifierProvider<VehicleNotifier, AsyncValue<List<Vehicle>>>((ref) {
   final currentUser = ref.watch(userNotifierProvider).value;
   final getVehiclesUseCase = ref.watch(getVehiclesUseCaseProvider);
   final addVehicleUseCase = ref.watch(addVehicleUseCaseProvider);
-  
+
   return VehicleNotifier(
     getVehiclesUseCase: getVehiclesUseCase,
     addVehicleUseCase: addVehicleUseCase,
-    userId: currentUser?.uid?? '',
+    userId: currentUser?.uid ?? '',
   );
+});
+
+// Stream provider to get a single vehicle by ID
+final vehicleStreamProvider = StreamProvider.family<Vehicle, String>((ref, vehicleId) {
+  final firestore = ref.watch(firestoreProvider);
+  
+  return firestore
+      .collection('vehicles')
+      .doc(vehicleId)
+      .snapshots()
+      .map((snapshot) {
+    if (!snapshot.exists) {
+      throw Exception('Vehicle not found');
+    }
+    
+    final data = snapshot.data()!;
+    return Vehicle(
+      id: snapshot.id,
+      ownerId: data['ownerId'] ?? '',
+      plateNumber: data['plateNumber'] ?? '',
+      brand: data['brand'] ?? '',
+      model: data['model'] ?? '',
+    );
+  });
 });
 
 class VehicleNotifier extends StateNotifier<AsyncValue<List<Vehicle>>> {
@@ -43,9 +68,10 @@ class VehicleNotifier extends StateNotifier<AsyncValue<List<Vehicle>>> {
 
     state = const AsyncValue.loading();
     final result = await getVehiclesUseCase(userId);
-    
+
     result.fold(
-      (failure) => state = AsyncValue.error(failure.message, StackTrace.current),
+      (failure) =>
+          state = AsyncValue.error(failure.message, StackTrace.current),
       (vehicles) => state = AsyncValue.data(vehicles),
     );
   }
@@ -61,18 +87,19 @@ class VehicleNotifier extends StateNotifier<AsyncValue<List<Vehicle>>> {
     }
 
     state = const AsyncValue.loading();
-    
+
     final params = AddVehicleParams(
       ownerId: userId,
       plateNumber: plateNumber,
       brand: brand,
       model: model,
     );
-    
+
     final result = await addVehicleUseCase(params);
-    
+
     result.fold(
-      (failure) => state = AsyncValue.error(failure.message, StackTrace.current),
+      (failure) =>
+          state = AsyncValue.error(failure.message, StackTrace.current),
       (vehicle) {
         final currentVehicles = state.value ?? [];
         state = AsyncValue.data([...currentVehicles, vehicle]);
@@ -108,4 +135,3 @@ final vehicleRemoteDataSourceProvider = Provider((ref) {
 final firestoreProvider = Provider((ref) {
   return FirebaseFirestore.instance;
 });
-
