@@ -1,6 +1,7 @@
 import 'package:drive_trust/features/drivers/domain/entities/driver.dart';
 import 'package:drive_trust/features/drivers/presentation/providers/driver_provider.dart';
 import 'package:drive_trust/features/drivers/presentation/widgets/driver_card.dart';
+import 'package:drive_trust/features/vehicles/presentation/providers/vehicle_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -153,7 +154,8 @@ class DriverListScreen extends ConsumerWidget {
     );
   }
 
-  void _showEditDriverDialog(BuildContext context, WidgetRef ref, Driver driver) {
+  void _showEditDriverDialog(
+      BuildContext context, WidgetRef ref, Driver driver) {
     final nameController = TextEditingController(text: driver.name);
     final emailController = TextEditingController(text: driver.email);
 
@@ -242,20 +244,56 @@ class DriverListScreen extends ConsumerWidget {
 
   void _showAssignVehicleDialog(
       BuildContext context, WidgetRef ref, Driver driver) {
-    // TODO: Implement vehicle selection from a list of available vehicles
-    // For now, we'll just show a placeholder
+    final vehiclesState = ref.watch(vehicleProvider);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Assigner à un véhicule'),
-        content: const Text(
-            'Cette fonctionnalité sera disponible prochainement.'),
+        content: vehiclesState.when(
+          loading: () => const SizedBox(
+            height: 100,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          error: (error, stackTrace) => Text('Erreur: $error'),
+          data: (vehicles) {
+            if (vehicles.isEmpty) {
+              return const Text(
+                'Aucun véhicule disponible. Veuillez d\'abord ajouter un véhicule.',
+              );
+            }
+
+            return SizedBox(
+              width: double.maxFinite,
+              height: 300,
+              child: ListView.builder(
+                itemCount: vehicles.length,
+                itemBuilder: (context, index) {
+                  final vehicle = vehicles[index];
+                  return ListTile(
+                    leading: const Icon(Icons.directions_car),
+                    title: Text('${vehicle.brand} ${vehicle.model}'),
+                    subtitle: Text('Plaque: ${vehicle.plateNumber}'),
+                    onTap: () {
+                      ref
+                          .read(driverNotifierProvider.notifier)
+                          .assignDriverToVehicle(driver.id, vehicle.id);
+                      Navigator.of(context).pop();
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('OK'),
+            child: const Text('Annuler'),
           ),
         ],
       ),

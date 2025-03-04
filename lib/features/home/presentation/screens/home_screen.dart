@@ -1,7 +1,11 @@
 import 'package:drive_trust/features/auth/presentation/providers/auth_provider.dart';
+import 'package:drive_trust/features/transactions/domain/entities/transaction.dart';
+import 'package:drive_trust/features/transactions/presentation/providers/transaction_provider.dart';
+import 'package:drive_trust/features/vehicles/presentation/providers/vehicle_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -42,13 +46,19 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _HomeContent extends StatelessWidget {
+class _HomeContent extends ConsumerWidget {
   final dynamic user;
 
   const _HomeContent({required this.user});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final vehiclesState = ref.watch(vehicleProvider);
+    final vehicleCount = vehiclesState.maybeWhen(
+      data: (vehicles) => vehicles.length,
+      orElse: () => 0,
+    );
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +80,7 @@ class _HomeContent extends StatelessWidget {
                 Text(
                   'Bonjour,',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                 ),
                 const SizedBox(height: 4),
@@ -87,7 +97,7 @@ class _HomeContent extends StatelessWidget {
                 Text(
                   'Bienvenue sur DriveTrust, votre compagnon de confiance pour la gestion de vos véhicules.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                       ),
                 ),
               ],
@@ -113,21 +123,27 @@ class _HomeContent extends StatelessWidget {
               children: [
                 _StatCard(
                   title: 'Véhicules',
-                  value: '0',
+                  value: vehicleCount.toString(),
                   icon: Icons.directions_car,
                   color: Colors.blue,
                 ),
-                _StatCard(
-                  title: 'Entretiens',
-                  value: '0',
-                  icon: Icons.build,
+                _TransactionStatCard(
+                  title: 'Dépenses',
+                  category: null,
+                  icon: Icons.euro,
+                  color: Colors.green,
+                ),
+                _TransactionStatCard(
+                  title: 'Carburant',
+                  category: TransactionCategory.fuel,
+                  icon: Icons.local_gas_station,
                   color: Colors.orange,
                 ),
-                _StatCard(
-                  title: 'Pleins',
-                  value: '0',
-                  icon: Icons.local_gas_station,
-                  color: Colors.green,
+                _TransactionStatCard(
+                  title: 'Entretien',
+                  category: TransactionCategory.maintenance,
+                  icon: Icons.build,
+                  color: Colors.purple,
                 ),
               ],
             ),
@@ -176,7 +192,7 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -201,7 +217,7 @@ class _StatCard extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).textTheme.bodySmall?.color,
+                  color: Colors.grey,
                 ),
           ),
         ],
@@ -210,58 +226,105 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-class _FeatureCard extends StatelessWidget {
+class _TransactionStatCard extends ConsumerWidget {
   final String title;
+  final TransactionCategory? category;
   final IconData icon;
   final Color color;
-  final VoidCallback onTap;
 
-  const _FeatureCard({
+  const _TransactionStatCard({
     required this.title,
+    required this.category,
     required this.icon,
     required this.color,
-    required this.onTap,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final vehiclesState = ref.watch(vehicleProvider);
+
+    return vehiclesState.when(
+      data: (vehicles) {
+        double totalAmount = 0;
+
+        for (final vehicle in vehicles) {
+          final amount =
+              ref.watch(_getTransactionAmountProvider((vehicle.id, category)));
+          totalAmount += amount;
+        }
+
+        final currencyFormat =
+            NumberFormat.currency(locale: 'fr_FR', symbol: '€');
+
+        return Container(
+          width: 150,
+          margin: const EdgeInsets.only(right: 16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Theme.of(context).cardColor
+                : Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  size: 32,
-                  color: color,
-                ),
+              Icon(
+                icon,
+                color: color,
+                size: 32,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              Text(
+                currencyFormat.format(totalAmount),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              const SizedBox(height: 4),
               Text(
                 title,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
                     ),
               ),
             ],
           ),
-        ),
-      ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }
+
+// Provider to get transaction amount for a specific vehicle and category
+final _getTransactionAmountProvider =
+    Provider.family<double, (String, TransactionCategory?)>((ref, params) {
+  final vehicleId = params.$1;
+  final category = params.$2;
+
+  final transactionsAsyncValue =
+      ref.watch(transactionsStreamProvider(vehicleId));
+
+  return transactionsAsyncValue.when(
+    data: (transactions) {
+      if (category != null) {
+        final filteredTransactions =
+            transactions.where((t) => t.category == category).toList();
+        return filteredTransactions.fold(
+            0.0, (sum, transaction) => sum + transaction.amount);
+      }
+      return transactions.fold(
+          0.0, (sum, transaction) => sum + transaction.amount);
+    },
+    loading: () => 0.0,
+    error: (_, __) => 0.0,
+  );
+});

@@ -9,7 +9,7 @@ enum TransactionCategory {
   other,
 }
 
-class Transaction extends Equatable {
+class TransactionEntity extends Equatable {
   final String id;
   final String vehicleId;
   final double amount;
@@ -17,7 +17,7 @@ class Transaction extends Equatable {
   final String description;
   final DateTime timestamp;
 
-  const Transaction({
+  const TransactionEntity({
     required this.id,
     required this.vehicleId,
     required this.amount,
@@ -27,5 +27,6 @@ class Transaction extends Equatable {
   });
 
   @override
-  List<Object> get props => [id, vehicleId, amount, category, description, timestamp];
+  List<Object> get props =>
+      [id, vehicleId, amount, category, description, timestamp];
 }

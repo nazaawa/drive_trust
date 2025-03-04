@@ -25,7 +25,7 @@ final driverRemoteDataSourceProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DriverRemoteDataSourceRef = ProviderRef<DriverRemoteDataSource>;
-String _$driverRepositoryHash() => r'4314974c9ad9066dacfbc623e34b5eb52ddf1fb1';
+String _$driverRepositoryHash() => r'0b0a1317fc8f19878fc9687802fabd4314ac0fff';
 
 /// See also [driverRepository].
 @ProviderFor(driverRepository)

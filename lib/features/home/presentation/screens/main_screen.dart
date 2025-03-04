@@ -1,6 +1,7 @@
 import 'package:drive_trust/features/drivers/presentation/screens/driver_list_screen.dart';
 import 'package:drive_trust/features/home/presentation/screens/home_screen.dart';
 import 'package:drive_trust/features/home/presentation/widgets/bottom_nav_bar.dart';
+import 'package:drive_trust/features/settings/presentation/settings_screen.dart';
 import 'package:drive_trust/features/vehicles/presentation/screens/vehicle_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,11 +36,7 @@ class MainScreen extends ConsumerWidget {
       case 2:
         return DriverListScreen();
       case 3:
-        return const _ComingSoonScreen(
-          title: 'Profil',
-          icon: Icons.person,
-          message: 'La gestion de profil sera bientôt disponible',
-        );
+        return const SettingsScreen();
       default:
         return const HomeScreen();
     }

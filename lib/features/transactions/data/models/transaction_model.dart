@@ -1,6 +1,6 @@
 import 'package:drive_trust/features/transactions/domain/entities/transaction.dart';
 
-class TransactionModel extends Transaction {
+class TransactionModel extends TransactionEntity {
   const TransactionModel({
     required super.id,
     required super.vehicleId,
@@ -30,6 +30,17 @@ class TransactionModel extends Transaction {
       'description': description,
       'timestamp': timestamp.toIso8601String(),
     };
+  }
+  
+  TransactionEntity toEntity() {
+    return TransactionEntity(
+      id: id,
+      vehicleId: vehicleId,
+      amount: amount,
+      category: category,
+      description: description,
+      timestamp: timestamp,
+    );
   }
 
   static TransactionCategory _mapStringToTransactionCategory(String category) {
