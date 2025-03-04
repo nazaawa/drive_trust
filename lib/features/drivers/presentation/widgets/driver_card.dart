@@ -1,7 +1,10 @@
+import 'package:drive_trust/core/theme/app_theme.dart';
 import 'package:drive_trust/features/drivers/domain/entities/driver.dart';
+import 'package:drive_trust/features/vehicles/presentation/providers/vehicle_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DriverCard extends StatelessWidget {
+class DriverCard extends ConsumerWidget {
   final Driver driver;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
@@ -18,13 +21,12 @@ class DriverCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 6,
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,11 +35,11 @@ class DriverCard extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  child: Icon(
-                    Icons.person,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                  radius: 24,
+                  backgroundColor:
+                      AppTheme.primaryColor.withValues(alpha: 0.15),
+                  child: Icon(Icons.person,
+                      size: 28, color: AppTheme.primaryColor),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -46,14 +48,18 @@ class DriverCard extends StatelessWidget {
                     children: [
                       Text(
                         driver.name,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       Text(
                         driver.email,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -61,49 +67,47 @@ class DriverCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
+            Wrap(
+              spacing: 8,
               children: [
-                Expanded(
-                  child: _buildStatusChip(context),
-                ),
+                _buildStatusChip(context),
+                if (driver.vehicleId != null) _buildVehicleChip(context, ref),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (onAssign != null)
+                  _buildActionButton(
+                    icon: Icons.add,
+                    label: 'Assigner',
+                    onPressed: onAssign!,
+                    color: Colors.blue,
+                  ),
+                if (onUnassign != null)
+                  _buildActionButton(
+                    icon: Icons.remove,
+                    label: 'Retirer',
+                    onPressed: onUnassign!,
+                    color: Colors.orange,
+                  ),
                 if (onEdit != null)
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: onEdit,
-                    tooltip: 'Modifier',
+                  _buildActionButton(
+                    icon: Icons.edit,
+                    label: 'Modifier',
+                    onPressed: onEdit!,
+                    color: Colors.grey,
                   ),
                 if (onDelete != null)
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: onDelete,
-                    tooltip: 'Supprimer',
+                  _buildActionButton(
+                    icon: Icons.delete,
+                    label: 'Supprimer',
+                    onPressed: onDelete!,
+                    color: Colors.red,
                   ),
               ],
             ),
-            if (driver.vehicleId != null || onAssign != null || onUnassign != null)
-              const Divider(height: 24),
-            if (driver.vehicleId != null || onAssign != null || onUnassign != null)
-              Row(
-                children: [
-                  Expanded(
-                    child: driver.vehicleId != null
-                        ? _buildVehicleInfo(context)
-                        : const Text('Aucun véhicule assigné'),
-                  ),
-                  if (onAssign != null)
-                    TextButton.icon(
-                      onPressed: onAssign,
-                      icon: const Icon(Icons.add),
-                      label: const Text('Assigner'),
-                    ),
-                  if (onUnassign != null)
-                    TextButton.icon(
-                      onPressed: onUnassign,
-                      icon: const Icon(Icons.remove),
-                      label: const Text('Retirer'),
-                    ),
-                ],
-              ),
           ],
         ),
       ),
@@ -112,43 +116,64 @@ class DriverCard extends StatelessWidget {
 
   Widget _buildStatusChip(BuildContext context) {
     final isActive = driver.contractStatus == ContractStatus.active;
-    
     return Chip(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       backgroundColor: isActive
-          ? Colors.green.withOpacity(0.1)
-          : Colors.grey.withOpacity(0.1),
+          ? Colors.green.withValues(alpha: 0.1)
+          : Colors.grey.withValues(alpha: 0.1),
       label: Text(
         isActive ? 'Actif' : 'Inactif',
         style: TextStyle(
-          color: isActive ? Colors.green : Colors.grey,
-          fontWeight: FontWeight.bold,
+          color: isActive ? Colors.green : Colors.grey[700],
+          fontWeight: FontWeight.w600,
         ),
       ),
       avatar: Icon(
         isActive ? Icons.check_circle : Icons.cancel,
-        size: 16,
-        color: isActive ? Colors.green : Colors.grey,
+        size: 18,
+        color: isActive ? Colors.green : Colors.grey[700],
       ),
     );
   }
 
-  Widget _buildVehicleInfo(BuildContext context) {
-    return Row(
-      children: [
-        const Icon(
-          Icons.directions_car,
-          size: 16,
-          color: Colors.blue,
-        ),
-        const SizedBox(width: 8),
-        Text(
-          'Véhicule assigné',
-          style: TextStyle(
-            color: Colors.blue,
-            fontWeight: FontWeight.bold,
+  Widget _buildVehicleChip(BuildContext context, WidgetRef ref) {
+    final vehiclesState = ref.watch(vehicleProvider);
+    return vehiclesState.when(
+      loading: () => const Chip(label: Text('Chargement...')),
+      error: (_, __) => const Chip(label: Text('Erreur')),
+      data: (vehicles) {
+        final vehicle = vehicles.firstWhere((v) => v.id == driver.vehicleId);
+        return Chip(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          backgroundColor: Colors.blue.withValues(alpha: 0.1),
+          label: Text(
+            '${vehicle.brand} ${vehicle.model}',
+            style: const TextStyle(
+                color: Colors.blue, fontWeight: FontWeight.w600),
           ),
+          avatar:
+              const Icon(Icons.directions_car, size: 18, color: Colors.blue),
+        );
+      },
+    );
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    required Color color,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: TextButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: 18, color: color),
+        label: Text(label, style: TextStyle(color: color)),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
-      ],
+      ),
     );
   }
 }
