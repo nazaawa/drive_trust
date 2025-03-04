@@ -14,6 +14,23 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && request.auth.uid == resource.data.ownerId;
     }
     
+    // Allow users to read and write their own transactions
+    match /transactions/{transactionId} {
+      // Function to check if the vehicle belongs to the user
+      function ownsVehicle(vehicleId) {
+        return get(/databases/$(database)/documents/vehicles/$(vehicleId)).data.ownerId == request.auth.uid;
+      }
+      
+      // Allow read if the user owns the vehicle associated with the transaction
+      allow read: if request.auth != null && ownsVehicle(resource.data.vehicleId);
+      
+      // Allow create if the user owns the vehicle associated with the transaction
+      allow create: if request.auth != null && ownsVehicle(request.resource.data.vehicleId);
+      
+      // Allow update and delete if the user owns the vehicle associated with the transaction
+      allow update, delete: if request.auth != null && ownsVehicle(resource.data.vehicleId);
+    }
+    
     // Default deny all
     match /{document=**} {
       allow read, write: if false;
