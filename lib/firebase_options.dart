@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCHw1e6x6GtfC6W3Nyq0DH4xFr-RsRAtvQ',
-    appId: '1:19354536734:android:240070771fa2b2512b570f',
-    messagingSenderId: '19354536734',
-    projectId: 'zoom-clone-application',
-    storageBucket: 'zoom-clone-application.firebasestorage.app',
+    apiKey: 'AIzaSyCWTIbQHzIh4TlYO4X_teQ_k7W6JLNs7cU',
+    appId: '1:124242284599:android:c795020e6a1a8dc97f2fb2',
+    messagingSenderId: '124242284599',
+    projectId: 'ageraliment-af637',
+    storageBucket: 'ageraliment-af637.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBK_4ayO70ge_tvkZgScex3p0i4KP624OI',
-    appId: '1:19354536734:ios:19e851517804f06d2b570f',
-    messagingSenderId: '19354536734',
-    projectId: 'zoom-clone-application',
-    storageBucket: 'zoom-clone-application.firebasestorage.app',
+    apiKey: 'AIzaSyDfeph76kZ56z3Ni_Png-BU-xcY2SQqAtw',
+    appId: '1:124242284599:ios:1120390651b26b3c7f2fb2',
+    messagingSenderId: '124242284599',
+    projectId: 'ageraliment-af637',
+    storageBucket: 'ageraliment-af637.firebasestorage.app',
     iosBundleId: 'com.drive.trust.driveTrust',
   );
 }

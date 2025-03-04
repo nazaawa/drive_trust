@@ -1,1 +1,26 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"zoom-clone-application","appId":"1:19354536734:android:240070771fa2b2512b570f","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"zoom-clone-application","configurations":{"android":"1:19354536734:android:240070771fa2b2512b570f","ios":"1:19354536734:ios:19e851517804f06d2b570f"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "ageraliment-af637",
+          "appId": "1:124242284599:android:c795020e6a1a8dc97f2fb2",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "ageraliment-af637",
+          "configurations": {
+            "android": "1:124242284599:android:c795020e6a1a8dc97f2fb2",
+            "ios": "1:124242284599:ios:1120390651b26b3c7f2fb2"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

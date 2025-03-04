@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "19354536734",
-    "project_id": "zoom-clone-application",
-    "storage_bucket": "zoom-clone-application.firebasestorage.app"
+    "project_number": "124242284599",
+    "project_id": "ageraliment-af637",
+    "storage_bucket": "ageraliment-af637.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:19354536734:android:240070771fa2b2512b570f",
+        "mobilesdk_app_id": "1:124242284599:android:c795020e6a1a8dc97f2fb2",
         "android_client_info": {
           "package_name": "com.drive.trust.drive_trust"
         }
@@ -15,12 +15,74 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCHw1e6x6GtfC6W3Nyq0DH4xFr-RsRAtvQ"
+          "current_key": "AIzaSyCWTIbQHzIh4TlYO4X_teQ_k7W6JLNs7cU"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124242284599-21s66o72bomj562e2egnmbiafl55uu94.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.agerAliment"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124242284599:android:c3ed6b47ecbab7a27f2fb2",
+        "android_client_info": {
+          "package_name": "com.example.ager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWTIbQHzIh4TlYO4X_teQ_k7W6JLNs7cU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124242284599-21s66o72bomj562e2egnmbiafl55uu94.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.agerAliment"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124242284599:android:8490d2139b2745a67f2fb2",
+        "android_client_info": {
+          "package_name": "com.example.ager_aliment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWTIbQHzIh4TlYO4X_teQ_k7W6JLNs7cU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124242284599-21s66o72bomj562e2egnmbiafl55uu94.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.agerAliment"
+              }
+            }
+          ]
         }
       }
     }
