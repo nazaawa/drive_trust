@@ -55,3 +55,7 @@ lib/features/**/*.freezed.dart
 # Fichiers générés Android
 android/app/.cxx/
 android/**/.cxx/
+
+# Environment files
+.env
+.env.*
