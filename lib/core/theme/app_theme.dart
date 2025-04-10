@@ -1,8 +1,13 @@
+import 'package:drive_trust/core/theme/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+
+
+
+
 class AppTheme {
-  static const Color primaryColor = Color(0xFF1E3A8A); // Deep blue
+  static Color primaryColor = "#2A2E55".toColor(); // Deep blue
   static const Color secondaryColor = Color(0xFF556B2F); // Olive green
   static const Color accentColor = Color(0xFF4CAF50); // Green
   static const Color backgroundColor = Color(0xFFF5F5F5); // Light grey
@@ -63,7 +68,7 @@ class AppTheme {
               ),
             ),
       ),
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -85,7 +90,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: primaryColor,
-          side: const BorderSide(color: primaryColor),
+          side: BorderSide(color: primaryColor),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -121,7 +126,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: primaryColor),
+          borderSide: BorderSide(color: primaryColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -262,7 +267,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: primaryColor),
+          borderSide: BorderSide(color: primaryColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
