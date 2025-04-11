@@ -1,7 +1,9 @@
+import 'package:drive_trust/core/routes/routes.dart';
 import 'package:drive_trust/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -30,6 +32,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final Animation<double> _infoScale;
   late final Animation<double> _buttonScale;
   late final Animation<double> _wheelRotation;
+
+  List<Timer> _animationTimers = [];
 
   @override
   void initState() {
@@ -84,7 +88,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       duration: const Duration(milliseconds: 800),
     );
     _carsSlide = Tween<Offset>(
-      begin: const Offset(-1.0, 0.0),
+      begin: const Offset(1.0, 0.0),
       end: Offset.zero,
     ).animate(
         CurvedAnimation(parent: _carsController, curve: Curves.easeOutCubic));
@@ -130,20 +134,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   }
 
   void _startAnimations() {
-    Future.delayed(Duration.zero, () => _sceneryController.forward());
-    Future.delayed(Duration.zero, () => _carpetController.forward());
-    Future.delayed(
-        const Duration(milliseconds: 600), () => _titleController.forward());
-    Future.delayed(
-        const Duration(milliseconds: 1200), () => _carsController.forward());
-    Future.delayed(
-        const Duration(milliseconds: 1800), () => _infoController.forward());
-    Future.delayed(
-        const Duration(milliseconds: 2200), () => _buttonController.forward());
+    _animationTimers = [
+      Timer(Duration.zero, () => _sceneryController.forward()),
+      Timer(Duration.zero, () => _carpetController.forward()),
+      Timer(
+          const Duration(milliseconds: 600), () => _titleController.forward()),
+      Timer(
+          const Duration(milliseconds: 1200), () => _carsController.forward()),
+      Timer(
+          const Duration(milliseconds: 1800), () => _infoController.forward()),
+      Timer(const Duration(milliseconds: 2200),
+          () => _buttonController.forward()),
+    ];
   }
 
   @override
   void dispose() {
+    // Cancel any pending animations
+    for (var timer in _animationTimers) {
+      timer.cancel();
+    }
+    
     _sceneryController.dispose();
     _carpetController.dispose();
     _titleController.dispose();
@@ -253,9 +264,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 margin: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                   ),
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Column(
@@ -288,48 +299,51 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             bottom: 0,
             left: 0,
             right: 0,
-            child: ScaleTransition(
-              scale: _buttonScale,
-              child: Container(
-                width: 100,
-                height: 50,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                margin: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: "Let's Gooo",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
+            child: GestureDetector(
+              onTap: () => const LoginRoute().push(context),
+              child: ScaleTransition(
+                scale: _buttonScale,
+                child: Container(
+                  width: 100,
+                  height: 50,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "Let's Gooo",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        WidgetSpan(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: AnimatedBuilder(
-                              animation: _wheelRotation,
-                              builder: (context, child) => Transform.rotate(
-                                angle: _wheelRotation.value,
-                                child: child,
-                              ),
-                              child: Image.asset(
-                                'assets/images/steering-wheel.png',
-                                width: 20,
-                                height: 20,
+                          WidgetSpan(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: AnimatedBuilder(
+                                animation: _wheelRotation,
+                                builder: (context, child) => Transform.rotate(
+                                  angle: _wheelRotation.value,
+                                  child: child,
+                                ),
+                                child: Image.asset(
+                                  'assets/images/steering-wheel.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

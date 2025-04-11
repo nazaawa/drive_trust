@@ -29,7 +29,7 @@ class AppTheme {
         onError: Colors.white,
         onSurface: textColor,
       ),
-      textTheme: GoogleFonts.poppinsTextTheme(
+      textTheme: GoogleFonts.interTextTheme(
         ThemeData.light().textTheme.copyWith(
               displayLarge: TextStyle(
                 fontSize: 24,
@@ -170,7 +170,7 @@ class AppTheme {
         onError: Colors.white,
         onSurface: Colors.white,
       ),
-      textTheme: GoogleFonts.poppinsTextTheme(
+      textTheme: GoogleFonts.interTextTheme(
         ThemeData.dark().textTheme.copyWith(
               displayLarge: const TextStyle(
                 fontSize: 24,
